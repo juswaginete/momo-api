@@ -47,11 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'rest_framework',
-
-    'accounts',
-    'products',
 ]
 
 ROOT_URLCONF = 'momoapi.urls'
