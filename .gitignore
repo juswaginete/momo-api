@@ -38,3 +38,5 @@ yarn.lock
 /static
 
 media/
+
+.python-version
