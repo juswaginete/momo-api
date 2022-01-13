@@ -1,10 +1,15 @@
 from django.db import models
 
-# Create your models here.
 optional = {
-    'null': True,
-    'blank': True,
+'null': True,
+'blank': True,
 }
+
+class ProductType(models.Model):
+	name = models.CharField(max_length=30)
+	date_created = models.DateTimeField(auto_now_add=True)
+	date_updated = models.DateTimeField(auto_now=True)
+
 
 class Products(models.Model):
     product_name = models.CharField(max_length=255, **optional)
