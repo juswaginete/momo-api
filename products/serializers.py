@@ -5,6 +5,11 @@ from rest_framework import serializers
 
 from .models import Products, ProductTypes
 
+class ProductTypesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductTypes
+        fields = '__all__'
+
 class ProductsSerializer(serializers.ModelSerializer):
     """
     Serializer class for Products model
