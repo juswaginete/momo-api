@@ -8,8 +8,27 @@ from rest_framework.views import APIView
 
 
 from .models import Products, ProductTypes
-from .serializers import ProductsSerializer
-# TODO:, ProductTypesSerializer
+from .serializers import ProductsSerializer, ProductTypesSerializer
+
+
+
+class ProductTypesView(APIView):
+    """
+    Handles API endpoints for Product Types
+    """
+
+    def get(self, request, format=None):
+        product_types = ProductTypes.objects.all()
+        serializer = ProductTypesSerializer(product_types, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+            serializer = ProductTypesSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductsView(APIView):
@@ -24,8 +43,6 @@ class ProductsView(APIView):
         products = Products.objects.all()
         serializer = ProductsSerializer(products, many=True)
 
-        return Response(serializer.data)
-
     def post(self, request):
         """
         POST endpoint for creating a product in Products model/table
@@ -35,7 +52,6 @@ class ProductsView(APIView):
             return Response(serializer.create_product(request))
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class ProductObjectView(APIView):

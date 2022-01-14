@@ -3,8 +3,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import serializers
 
-from .models import Products
-# TODO:, ProductTypes
+from .models import Products, ProductTypes
+
+class ProductTypesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductTypes
+        fields = '__all__'
 
 class ProductsSerializer(serializers.ModelSerializer):
     """
