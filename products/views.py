@@ -13,8 +13,9 @@ from .serializers import ProductsSerializer, ProductTypesSerializer
 
 
 class ProductTypesView(APIView):
-
-    # Handles api endpoints for pet types
+    """
+    Handles API endpoints for Product Types
+    """
 
     def get(self, request, format=None):
         product_types = ProductTypes.objects.all()
