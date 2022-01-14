@@ -14,12 +14,12 @@ from .serializers import ProductsSerializer
 
 class ProductsView(APIView):
     """
-    Handles api endpoints for pets
+    Handles API endpoints for Products
     """
 
     def get(self, request, format=None):
         """
-        GET endpoint to list all pets in Pets model/table
+        GET endpoint to list all products in Products model/table
         """
         products = Products.objects.all()
         serializer = ProductsSerializer(products, many=True)
@@ -28,7 +28,7 @@ class ProductsView(APIView):
 
     def post(self, request):
         """
-        POST endpoint for creating a pet in Pets model/table
+        POST endpoint for creating a product in Products model/table
         """
         serializer = ProductsSerializer(data=request.data)
         if serializer.is_valid():
@@ -40,7 +40,7 @@ class ProductsView(APIView):
 
 class ProductObjectView(APIView):
     """
-    Handles the api endpoint for getting specific product
+    Handles the API endpoints for getting a specific product
     """
 
     def get_object(self, pk):
@@ -55,7 +55,7 @@ class ProductObjectView(APIView):
 
     def get(self, request, pk, format=None):
         """
-        GET endpoint to list all pets in Pets model/table
+        GET endpoint to list a specific product in Products model/table
         """
         product = self.get_object(pk)
         serializer = ProductsSerializer(product)
@@ -63,6 +63,9 @@ class ProductObjectView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
+        """
+        PUT endpoint to update a specific product in Products model/table
+        """
         product = self.get_object(pk)
         serializer = ProductsSerializer(product, data=request.data)
         if serializer.is_valid():
@@ -71,6 +74,9 @@ class ProductObjectView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        """
+        DELETE endpoint to destroy a specific product in Products model/table
+        """
         product = self.get_object(pk)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -8,7 +8,7 @@ from .models import Products
 
 class ProductsSerializer(serializers.ModelSerializer):
     """
-    Serializer class for Pets model
+    Serializer class for Products model
     """
 
     class Meta:
