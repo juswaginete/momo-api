@@ -6,6 +6,7 @@ from rest_framework import serializers
 from .models import Products, ProductTypes
 
 class ProductTypesSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProductTypes
         fields = '__all__'
@@ -24,10 +25,10 @@ class ProductsSerializer(serializers.ModelSerializer):
         product_name = self.data.get('product_name')
         product_description = self.data.get('product_description')
         # TODO: product_location = self.data.get('product_location')
-        product_price = self.data.get('price')
+        product_price = self.data.get('product_price')
 
         product_type_id = self.data.get('product_type')
-        # TODO: product_type = ProductTypes.objects.get(id=product_type_id)
+        product_type = ProductTypes.objects.get(id=product_type_id)
         # TODO: product_image
 
         date_created = self.data.get('date_created')
@@ -40,7 +41,7 @@ class ProductsSerializer(serializers.ModelSerializer):
                 # TODO: product_location=product_location,
                 product_price=product_price,
 
-                # TODO: product_type=product_type,
+                product_type=product_type,
                 # TODO: product_image=product_image
 
                 date_created=date_created,
@@ -56,12 +57,12 @@ class ProductsSerializer(serializers.ModelSerializer):
                 # TODO: "product_location":
                 "product_price": product.product_price,
 
-                # "product_type": {
-                #     "id": product.product_type.id,
-                #     "product_type_name": product.product_type.product_type_name,
-                #     "date_created": product.product_type.date_created,
-                #     "date_updated": product.product_type.date_updated,
-                # },
+                "product_type": {
+                    "id": product.product_type.id,
+                    "product_type_name": product.product_type.product_type_name,
+                    "date_created": product.product_type.date_created,
+                    "date_updated": product.product_type.date_updated,
+                },
 
                 #TODO: product image
 
