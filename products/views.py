@@ -30,6 +30,49 @@ class ProductTypesView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ProductTypeView(APIView):
+    """
+    Handles the API endpoints in a specific product type
+    """
+
+    def get_object(self, pk):
+        try:
+            return ProductTypes.objects.get(pk=pk)
+
+        except ProductTypes.DoesNotExist:
+            return Response({
+                'error': 'True',
+                'message': 'Product type not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, pk, format=None):
+        """
+        GET endpoint to list a specific product type (for testing purposes, not in the trello list)
+        """
+        product_type = self.get_object(pk)
+        serializer = ProductTypesSerializer(product_type)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk, format=None):
+        """
+        PUT endpoint to update a specific ProductType
+        """
+        product_type = self.get_object(pk)
+        serializer = ProductTypesSerializer(product_type, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        """
+        DELETE endpoint to delete a ProductType
+        """
+        product_type = self.get_object(pk)
+        product_type.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ProductsView(APIView):
     """
