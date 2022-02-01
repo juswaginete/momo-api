@@ -45,6 +45,15 @@ class ProductTypeView(APIView):
                 'message': 'Product type not found'
             }, status=status.HTTP_404_NOT_FOUND)
 
+    def get(self, request, pk, format=None):
+        """
+        GET endpoint to list a specific product type (for testing purposes, not in the trello list)
+        """
+        product_type = self.get_object(pk)
+        serializer = ProductTypesSerializer(product_type)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def put(self, request, pk, format=None):
         """
         PUT endpoint to update a specific ProductType
