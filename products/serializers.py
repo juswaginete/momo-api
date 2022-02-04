@@ -6,9 +6,16 @@ from rest_framework import serializers
 from .models import Products, ProductTypes
 
 class ProductTypesSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProductTypes
         fields = '__all__'
+
+    # def create_product(self, validated_data):
+    #     product_type_name = self.data.get('product_type_name')
+    #     date_created = self.data.get('date_created')
+    #     date_updated = self.data.get('date_updated')
+
 
 class ProductsSerializer(serializers.ModelSerializer):
     """
@@ -66,7 +73,7 @@ class ProductsSerializer(serializers.ModelSerializer):
                 #TODO: product image
 
                 "date_created": product.date_created,
-                "date_updaed": product.date_updated,
+                "date_updated": product.date_updated,
             }
         except Exception as e:
             raise e
