@@ -4,7 +4,7 @@ from django.contrib.auth import (
 )
 from django.utils import timezone
 
-from rest_framework import status
+from rest_framework import exceptions, status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -52,3 +52,18 @@ class LoginAPIView(APIView):
             'last_name': user.last_name,
             'password': user.password
         }, status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(APIView):
+
+    def post(self, request, format=None):
+        try:
+            token = Token.objects.get(key=request.user.auth_token)
+        except Token.DoesNotExist:
+            raise exceptions.AuthenticationFailed('Invalid token')
+
+        if not token.user.is_active:
+            raise exceptions.AuthenticationFailed('User inactive or deleted')
+
+        token.delete()
+        return Response(status=status.HTTP_200_OK)
