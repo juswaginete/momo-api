@@ -45,12 +45,8 @@ class ProductTypeView(APIView):
     def get_object(self, pk):
         try:
             return ProductTypes.objects.get(pk=pk)
-
         except ProductTypes.DoesNotExist:
-            return Response({
-                'error': 'True',
-                'message': 'Product type not found'
-            }, status=status.HTTP_404_NOT_FOUND)
+            raise Http404
 
     def get(self, request, pk, format=None):
         """
@@ -121,12 +117,8 @@ class ProductObjectView(APIView):
     def get_object(self, pk):
         try:
             return Products.objects.get(pk=pk)
-
         except Products.DoesNotExist:
-            return Response({
-                'error': 'True',
-                'message': 'Product not found'
-            }, status=status.HTTP_404_NOT_FOUND)
+            raise Http404
 
     def get(self, request, pk, format=None):
         """

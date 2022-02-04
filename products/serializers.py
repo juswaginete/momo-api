@@ -21,7 +21,6 @@ class ProductsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create_product(self, validated_data):
-
         product_name = self.data.get('product_name')
         product_description = self.data.get('product_description')
         # TODO: product_location = self.data.get('product_location')
