@@ -29,7 +29,7 @@ class UserSignupView(APIView):
 
 class LoginAPIView(APIView):
 
-    def post(self, request, forma=None):
+    def post(self, request, format=None):
         serializer = AuthCustomTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data.get('user')
