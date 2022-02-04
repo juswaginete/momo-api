@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import Http404
 
 from rest_framework import status
-from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,14 +17,18 @@ class ProductTypesView(APIView):
     """
     Handles API endpoints for Product Types
     """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         product_types = ProductTypes.objects.all()
         serializer = ProductTypesSerializer(product_types, many=True)
+
         return Response(serializer.data)
 
     def post(self, request):
             serializer = ProductTypesSerializer(data=request.data)
+
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -34,6 +39,8 @@ class ProductTypeView(APIView):
     """
     Handles the API endpoints in a specific product type
     """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -60,6 +67,7 @@ class ProductTypeView(APIView):
         """
         product_type = self.get_object(pk)
         serializer = ProductTypesSerializer(product_type, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -71,6 +79,7 @@ class ProductTypeView(APIView):
         """
         product_type = self.get_object(pk)
         product_type.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -78,6 +87,8 @@ class ProductsView(APIView):
     """
     Handles API endpoints for Products
     """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """
@@ -86,11 +97,14 @@ class ProductsView(APIView):
         products = Products.objects.all()
         serializer = ProductsSerializer(products, many=True)
 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request):
         """
         POST endpoint for creating a product in Products model/table
         """
         serializer = ProductsSerializer(data=request.data)
+
         if serializer.is_valid():
             return Response(serializer.create_product(request))
         else:
@@ -101,6 +115,8 @@ class ProductObjectView(APIView):
     """
     Handles the API endpoints for getting a specific product
     """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -127,6 +143,7 @@ class ProductObjectView(APIView):
         """
         product = self.get_object(pk)
         serializer = ProductsSerializer(product, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -138,4 +155,5 @@ class ProductObjectView(APIView):
         """
         product = self.get_object(pk)
         product.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
