@@ -11,12 +11,6 @@ class ProductTypesSerializer(serializers.ModelSerializer):
         model = ProductTypes
         fields = '__all__'
 
-    # def create_product(self, validated_data):
-    #     product_type_name = self.data.get('product_type_name')
-    #     date_created = self.data.get('date_created')
-    #     date_updated = self.data.get('date_updated')
-
-
 class ProductsSerializer(serializers.ModelSerializer):
     """
     Serializer class for Products model

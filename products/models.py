@@ -5,8 +5,13 @@ optional = {
     'blank': True,
 }
 
+required = {
+    'null': False,
+    'blank': False,
+}
+
 class ProductTypes(models.Model):
-    product_type_name = models.CharField(max_length=30, unique=True, **optional) #unique is true
+    product_type_name = models.CharField(max_length=30, unique=True, **required)
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
