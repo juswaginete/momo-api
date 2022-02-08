@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from drf_social_oauth2.views import ConvertTokenView
+# from drf_social_oauth2.views import ConvertTokenView
 
 from accounts.models import Profiles
 from accounts.serializers import AuthCustomTokenSerializer, UserModelSerializer
@@ -60,27 +60,31 @@ class LoginAPIView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-class FacebookLoginAPIView(ConvertTokenView):
+# class FacebookLoginAPIView(ConvertTokenView):
 
-    def post(self, request, *args, **kwargs):
-        res = super().post(request, *args, **kwargs)
+#     def post(self, request, *args, **kwargs):
+#         res = super().post(request, *args, **kwargs)
 
-        token = res.data["key"]
-        token_object = Token.objects.get(key=token)
+#         token = res.data["key"]
+#         token_object = Token.objects.get(key=token)
 
-        user = User.objects.filter(
-            email=token_object.user.email
-        ).first()
+#         user = User.objects.filter(
+#             email=token_object.user.email
+#         ).first()
 
-        User.objects.filter(
-            email=token_object.user.email
-        ).exclude(id=user.id).delete()
+#         User.objects.filter(
+#             email=token_object.user.email
+#         ).exclude(id=user.id).delete()
 
-        if user.is_active:
-            user_profile = Profiles(user=user)
-            user_profile.save()
+#         if user.is_active:
+#             user_profile = Profiles(user=user)
+#             user_profile.save()
             
-            # add serializer
+#             # add serializer
+
+#             return Response(
+#                 {"token": token,}
+#             )
 
 
 class LogoutAPIView(APIView):

@@ -42,15 +42,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
 
     'rest_framework',
     'rest_framework.authtoken',
-
-    'oauth2_provider',
-    'social_django',
-    'drf_social_oauth2',
 
     'accounts',
     'products',
@@ -83,8 +79,8 @@ TEMPLATES = [
                 # `allauth` needs this from django
                 'django.template.context_processors.request',
 
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -97,31 +93,31 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    # 'allauth.account.auth_backends.AuthenticationBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 
-    'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.facebook.FacebookAppOAuth2',
+    # 'social_core.backends.facebook.FacebookOAuth2',
 
-    'drf_social_oauth2.backends.DjangoOAuth2',
+    # 'drf_social_oauth2.backends.DjangoOAuth2',
 ]
 
 # REST_FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-        'drf_social_oauth2.authentication.SocialAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        # 'drf_social_oauth2.authentication.SocialAuthentication',
     ],
 }
 
 # Facebook configuration
-SOCIAL_AUTH_FACEBOOK_KEY = '3064102683803959'
-SOCIAL_AUTH_FACEBOOK_SECRET = '0647b0ef50a77c054867c39ac8b7a020'
+# SOCIAL_AUTH_FACEBOOK_KEY = '3064102683803959'
+# SOCIAL_AUTH_FACEBOOK_SECRET = '0647b0ef50a77c054867c39ac8b7a020'
 
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
+# SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+# SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+#     'fields': 'id, name, email'
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -175,9 +171,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 1
+SITE_ID = 4
 
-ACCOUNT_EMAIL_REQUIRED=True
+# ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+# LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_REQUIRED = True
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
@@ -186,9 +186,16 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '123',
-            'secret': '456',
+            'client_id': '924659058007-hlpu9k06hh136v1r1smjl5pktvlp3f75.apps.googleusercontent.com',
+            'secret': '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',
             'key': ''
         }
-    }
+    },
+    # 'facebook': {
+    #     'METHOD': 'oauth2',
+    #     'SCOPE': ['email'],
+    #     'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+    #     'LOCAL_FUNC': lambda request: 'en_US',
+    #     'VERSION': 'v2.4'
+    # }
 }
