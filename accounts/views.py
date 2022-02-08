@@ -1,4 +1,5 @@
 from django.contrib.auth import (
+    get_user_model,
     login as django_login,
     logout as django_logout,
 )
@@ -9,7 +10,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_social_oauth2.views import ConvertTokenView
+
+from accounts.models import Profiles
 from accounts.serializers import AuthCustomTokenSerializer, UserModelSerializer
+
+User = get_user_model()
 
 def get_current_datetime():
     return timezone.now().astimezone(timezone.get_default_timezone())
@@ -52,6 +58,29 @@ class LoginAPIView(APIView):
             'last_name': user.last_name,
             'password': user.password
         }, status=status.HTTP_200_OK)
+
+
+class FacebookLoginAPIView(ConvertTokenView):
+
+    def post(self, request, *args, **kwargs):
+        res = super().post(request, *args, **kwargs)
+
+        token = res.data["key"]
+        token_object = Token.objects.get(key=token)
+
+        user = User.objects.filter(
+            email=token_object.user.email
+        ).first()
+
+        User.objects.filter(
+            email=token_object.user.email
+        ).exclude(id=user.id).delete()
+
+        if user.is_active:
+            user_profile = Profiles(user=user)
+            user_profile.save()
+            
+            # add serializer
 
 
 class LogoutAPIView(APIView):
