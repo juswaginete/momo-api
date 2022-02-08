@@ -66,7 +66,7 @@ class ProductsSerializer(serializers.ModelSerializer):
                 #TODO: product image
 
                 "date_created": product.date_created,
-                "date_updaed": product.date_updated,
+                "date_updated": product.date_updated,
             }
         except Exception as e:
             raise e
