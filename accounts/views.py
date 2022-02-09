@@ -10,6 +10,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
+
 # from drf_social_oauth2.views import ConvertTokenView
 
 from accounts.models import Profiles
@@ -60,31 +65,42 @@ class LoginAPIView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-# class FacebookLoginAPIView(ConvertTokenView):
+class FacebookLoginAPIView(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+    client_class = OAuth2Client
 
-#     def post(self, request, *args, **kwargs):
-#         res = super().post(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        res = super().post(request, *args, **kwargs)
+        print(res.data)
+        # token = res.data["key"]
+        # token_object = Token.objects.get(key=token)
 
-#         token = res.data["key"]
-#         token_object = Token.objects.get(key=token)
+        # app_user = AppUser.objects.filter(
+        #     email=token_object.user.email).first()
+        # # delete duplicates
+        # AppUser.objects.filter(email=token_object.user.email).exclude(
+        #     id=app_user.id).delete()
 
-#         user = User.objects.filter(
-#             email=token_object.user.email
-#         ).first()
+        # if app_user.active and not app_user.deleted:
+        #     app_user.user = token_object.user
+        #     app_user.save()
 
-#         User.objects.filter(
-#             email=token_object.user.email
-#         ).exclude(id=user.id).delete()
+        #     serializer = AuthUserSerializer(instance=token_object.user)
+        #     return Response(
+        #         {"token": token, "user": serializer.data}, status=status.HTTP_200_OK
+        #     )
+        # else:
+        #     # banned/deleted user
+        #     return Response(
+        #         _("Account is marked as banned or deleted."),
+        #         status=status.HTTP_401_UNAUTHORIZED
+        #     )
 
-#         if user.is_active:
-#             user_profile = Profiles(user=user)
-#             user_profile.save()
-            
-#             # add serializer
 
-#             return Response(
-#                 {"token": token,}
-#             )
+class GoogleLoginAPIView(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = 'http://localhost:8000/accounts/google/login/callback/'
+    client_class = OAuth2Client
 
 
 class LogoutAPIView(APIView):
