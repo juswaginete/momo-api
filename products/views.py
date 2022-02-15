@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import Http404
 
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -147,3 +148,25 @@ class ProductObjectView(APIView):
         product.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FilterProductsListAPIView(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product_type']
+
+
+class SearchProductsListView(generics.ListAPIView):
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'product_name',
+        'product_description',
+        'user_profile__user__first_name',
+        'user_profile__user__last_name',
+        'user_profile__user__email'
+    ]

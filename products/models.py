@@ -1,5 +1,7 @@
 from django.db import models
 
+from accounts.models import Profiles
+
 optional = {
     'null': True,
     'blank': True,
@@ -22,6 +24,7 @@ class Products(models.Model):
     # TODO: product_location must be dynamic
     product_price = models.DecimalField(max_digits=20, decimal_places=8, **optional)
     product_type = models.ForeignKey(ProductTypes, on_delete=models.CASCADE, related_name="products", **optional)
+    user_profile = models.ForeignKey(Profiles, on_delete=models.CASCADE, related_name="products", **optional)
     # TODO: product_image will be done later
 
     date_created = models.DateTimeField(auto_now_add=True)
