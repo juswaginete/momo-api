@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.http import Http404
 
@@ -8,8 +10,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Products, ProductTypes
-from .serializers import ProductsSerializer, ProductTypesSerializer
+from .models import Products, ProductTypes, ProductImages
+from .serializers import ProductsSerializer, ProductTypesSerializer, ProductImagesSerializer
 
 
 class ProductTypesView(APIView):
@@ -170,3 +172,47 @@ class SearchProductsListView(generics.ListAPIView):
         'user_profile__user__last_name',
         'user_profile__user__email'
     ]
+class ProductImagesViewSet(generics.ListAPIView):
+
+    def post(self, request, *args, **kwargs):
+        
+        product_id = request.data['products']
+        product = Products.objects.get(id=product_id)
+
+        file_image = request.FILES['image']
+        image = ProductImages.objects.create(products=product, image=file_image)
+        return Response(json.dumps({'message': "Uploaded"}), status=status.HTTP_200_OK)
+
+
+    def get(self, request, format=None):
+        """
+        GET endpoint to list a specific product in Products model/table
+        """
+
+        products = ProductImages.objects.all()
+        serializer = ProductImagesSerializer(products, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class ProductImagesObjectViewSet(APIView):
+    """
+    Handles the API endpoints for getting a specific product
+    """
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return ProductImages.objects.get(pk=pk)
+        except ProductImages.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        GET endpoint to list a specific product in Products model/table
+        """
+        product = self.get_object(pk)
+        serializer = ProductImagesSerializer(product)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

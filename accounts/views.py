@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import (
     get_user_model,
     login as django_login,
@@ -6,7 +8,9 @@ from django.contrib.auth import (
 from django.utils import timezone
 
 from rest_framework import exceptions, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -18,7 +22,11 @@ from dj_rest_auth.registration.views import SocialLoginView
 # from drf_social_oauth2.views import ConvertTokenView
 
 from accounts.models import Profiles
-from accounts.serializers import AuthCustomTokenSerializer, UserModelSerializer
+from accounts.serializers import (
+    AuthCustomTokenSerializer, 
+    UserModelSerializer, 
+    UserProfileModelSerializer
+)
 
 User = get_user_model()
 
@@ -116,3 +124,42 @@ class LogoutAPIView(APIView):
 
         token.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class ProfilesObjectView(APIView):
+    """
+    Handles the API endpoints for getting the user profile details
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Profiles.objects.get(pk=pk)
+        except Profiles.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        GET endpoint to view a specific Profile in Profiles model/table
+        """
+        profile = self.get_object(pk)
+        serializer = UserProfileModelSerializer(profile)
+
+        profile_data = serializer.data
+
+        user_id = profile_data['user']
+        user = User.objects.get(id=user_id)
+     
+        response = {
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            },
+            "gender": profile_data['gender'],
+            "address": profile_data['address'],
+            "phone_number": profile_data['phone_number'],
+        }
+
+        return Response(response, status=status.HTTP_200_OK)

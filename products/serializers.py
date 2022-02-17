@@ -3,12 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import serializers
 
-from .models import (
-    Products,
-    ProductTypes
-)
-
-from accounts.models import Profiles
+from .models import Products, ProductTypes, ProductImages
 
 class ProductTypesSerializer(serializers.ModelSerializer):
 
@@ -35,7 +30,7 @@ class ProductsSerializer(serializers.ModelSerializer):
         user_profile_id = self.data.get('user_profile')
         user = Profiles.objects.get(id=user_profile_id)
         product_type = ProductTypes.objects.get(id=product_type_id)
-        # TODO: product_image
+        # product_image = self.data.get('product_image')
 
         # date_created = self.data.get('date_created')
         # date_updated = self.data.get('date_updated')
@@ -84,3 +79,9 @@ class ProductsSerializer(serializers.ModelSerializer):
                 }
         except Exception as e:
             raise e
+
+
+class ProductImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImages
+        fields = '__all__'
