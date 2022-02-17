@@ -6,7 +6,7 @@ from .views import (
     ProductsView,
     ProductTypeView,
     ProductTypesView,
-    SearchProductsListView
+    SearchProductsListView,
     ProductImagesViewSet,
     ProductImagesObjectViewSet,
 )
