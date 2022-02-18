@@ -136,3 +136,15 @@ class AuthCustomTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class UserProfileModelSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for viewing user profile
+    """
+
+    class Meta:
+        model = Profiles
+        fields = '__all__'
+
+    
