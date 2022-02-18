@@ -32,6 +32,17 @@ class UserSignupView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserUpdateView(APIView):
+
+    def put(self, request, format=None):
+
+        serializer = UserModelSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(APIView):
 
@@ -79,7 +90,7 @@ class LoginAPIView(APIView):
 #         if user.is_active:
 #             user_profile = Profiles(user=user)
 #             user_profile.save()
-            
+
 #             # add serializer
 
 #             return Response(
