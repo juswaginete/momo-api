@@ -28,7 +28,7 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("email", "first_name", "last_name",
-                  "password", "confirm_password")
+                  "password", "confirm_password", "user_image")
         extra_kwags = {
             "password": {"write_only": True, "style": {"input_type": "password"}},
             "email": {"required": True, "allow_blank": False, },

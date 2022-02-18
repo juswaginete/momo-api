@@ -17,6 +17,7 @@ class Profiles(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profiles")
+    user_image = models.ImageField(upload_to="images/", **optional)
     address = models.CharField(max_length=225, **optional)
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, **optional)
     phone_number = models.CharField(max_length=50, **optional)
